@@ -11,11 +11,11 @@ const router = express.Router();
 router.post(
   "/api/users/signup",
   [
-    body("email").isEmail().withMessage("Email-id provided is invalid"),
+    body("email").isEmail().withMessage("Email-id provided is invalid!"),
     body("password")
       .trim()
       .isLength({ min: 8, max: 20 })
-      .withMessage("Password must be between 8 and 20 characters"),
+      .withMessage("Password must be between 8 and 20 characters!"),
   ],
   validateRequest,
   async (req: Request, res: Response) => {

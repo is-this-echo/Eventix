@@ -39,6 +39,7 @@ it("Returns a 400 status-code with missing email & password signup ", async () =
       password: "",
     })
     .expect(400);
+
   return request(app)
     .post("/api/users/signup")
     .send({
@@ -46,4 +47,25 @@ it("Returns a 400 status-code with missing email & password signup ", async () =
       password: "9d0asfwsfj23--1",
     })
     .expect(400);
+});
+
+it("Disallows duplicate email signup", async () => {
+  await request(app)
+    .post("/api/users/signup")
+    .send({ email: "test@test.com", password: "password" })
+    .expect(201);
+
+  return request(app)
+    .post("/api/users/signup")
+    .send({ email: "test@test.com", password: "password" })
+    .expect(400);
+});
+
+it("Sets a cookie after successful signup", async () => {
+  const response = await request(app)
+    .post("/api/users/signup")
+    .send({ email: "test@test.com", password: "password" })
+    .expect(201);
+
+  expect(response.get("Set-Cookie")).toBeDefined();
 });
